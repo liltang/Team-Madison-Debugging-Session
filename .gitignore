@@ -1,0 +1,14 @@
+
+test/\.DS_Store
+
+test/test\.xcodeproj/project\.pbxproj
+
+test/test\.xcodeproj/project\.xcworkspace/contents\.xcworkspacedata
+
+test/test\.xcodeproj/project\.xcworkspace/xcuserdata/Caelen\.xcuserdatad/UserInterfaceState\.xcuserstate
+
+test/test\.xcodeproj/xcuserdata/Caelen\.xcuserdatad/xcdebugger/Breakpoints_v2\.xcbkptlist
+
+test/test\.xcodeproj/xcuserdata/Caelen\.xcuserdatad/xcschemes/xcschememanagement\.plist
+
+\.DS_Store
