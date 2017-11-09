@@ -5,7 +5,7 @@
 //#4 FIXED - Choice 2: Add student - fixed input iss bug
 //#5 FIXED - Function names "serachByName" "serachById" "serachByEmail" replaced with "searchByName" "searchById" "searchByEmail"
 //#6 array overflow not prevented
-//#7 errors on delete if student does not exist
+//#7 FIXED - errors on delete if student does not exist
 
 #include <iostream>
 #include <fstream>
