@@ -9,6 +9,10 @@
 //#8 FIXED - Choice 7: Update student (all) - When update is sucessful, return the newly updated student to the user
 //#9 array overflow not prevented
 //#10 FIXED - errors on delete if student does not exist
+<<<<<<< HEAD
+=======
+
+>>>>>>> bfb09bbf62e1774a9959ab0192ba4166d938e430
 
 #include <iostream>
 #include <fstream>
