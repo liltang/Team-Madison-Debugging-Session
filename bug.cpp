@@ -4,14 +4,11 @@
 //#3 FIXED - Enter any other character to terminate program -> replaced else if (choice > 7) with else
 //#4 FIXED - Choice 2: Add student - fixed input iss bug
 //#5 FIXED - Function names "serachByName" "serachById" "serachByEmail" replaced with "searchByName" "searchById" "searchByEmail"
-<<<<<<< HEAD
 //#6 FIXED - Choice 7: Update student (ID) - fixed parameter mismatch for newid and id
 //#7 FIXED - Choice 7: Update student (all) - added cout instructions to users asking for input
 //#8 FIXED - Choice 7: Update student (all) - When update is sucessful, return the newly updated student to the user
-=======
-//#6 array overflow not prevented
-//#7 FIXED - errors on delete if student does not exist
->>>>>>> f9fd2d9060ce4483d66b3f53fc8b4c2880744998
+//#9 array overflow not prevented
+//#10 FIXED - errors on delete if student does not exist
 
 #include <iostream>
 #include <fstream>
