@@ -2,11 +2,16 @@
 //#1 FIXED - Infinite loop due to non flushed input
 //#2 When entering student grades and then saving it
 //#3 FIXED - Enter any other character to terminate program -> replaced else if (choice > 7) with else
-//#4 FIXED - Choice 2: Add student - fixed input iss bug 
+//#4 FIXED - Choice 2: Add student - fixed input iss bug
 //#5 FIXED - Function names "serachByName" "serachById" "serachByEmail" replaced with "searchByName" "searchById" "searchByEmail"
+<<<<<<< HEAD
 //#6 FIXED - Choice 7: Update student (ID) - fixed parameter mismatch for newid and id
 //#7 FIXED - Choice 7: Update student (all) - added cout instructions to users asking for input
 //#8 FIXED - Choice 7: Update student (all) - When update is sucessful, return the newly updated student to the user
+=======
+//#6 array overflow not prevented
+//#7 FIXED - errors on delete if student does not exist
+>>>>>>> f9fd2d9060ce4483d66b3f53fc8b4c2880744998
 
 #include <iostream>
 #include <fstream>
@@ -51,7 +56,7 @@ public:
 	}
 
 	void setEmail(char *em) {
-		strcpy(email, em);		
+		strcpy(email, em);
 	}
 
 	char *getEmail() {
@@ -85,7 +90,7 @@ public:
 	// Information string //
 	string info() {
 		ostringstream oss;
-		oss << this->getName() << " " << this->getId() << " " << this->getEmail() << " " 
+		oss << this->getName() << " " << this->getId() << " " << this->getEmail() << " "
 			<< this->getGradeOfPresentation() << " " << this->getGradeOfEssay() << " " << this->getGradeOfProject();
 		return oss.str();
 	}
@@ -126,13 +131,16 @@ public:
 	// delete student by id
 	bool deleteStudent(char *id) {
 		vector<Student>::iterator erasePos = studentDatabase.end();
+        bool deleted = false;
 		for (vector<Student>::iterator it = studentDatabase.begin(); it != studentDatabase.end(); ++it) {
 			if (strcmp(it->getId(), id) == 0) {
 				erasePos = it;
+                studentDatabase.erase(erasePos);
+                deleted = true;
 				break;
 			}
 		}
-		return studentDatabase.erase(erasePos) == erasePos;
+		return deleted;
 	}
 
 	// search student by name
@@ -236,7 +244,7 @@ public:
 		cin >> file;
 		manager.readStudentData(file);
 	}
-	
+
 	//The system's running logic
 	void run() {
 		while (true) {
@@ -262,12 +270,12 @@ public:
 				cout << "Please enter the student's information on 1 line( name id email presentationGrade essayGrade projectGrade):" << endl;
 				string input;
 				getline(cin, input);
-				istringstream iss(input); 
+				istringstream iss(input);
 				//Bug fix #4: fixed iss input to properly read each variable
                            	char name[40], id[10], email[40];
 				iss >> name;
 				iss >> id;
-				iss >> email;  
+				iss >> email;
 				int gpre, ge, gpro;
 				iss >> gpre;
 				iss >> ge;
@@ -363,15 +371,15 @@ public:
 			{
 				cout << "Terminating program...\n\nSee you later!" << endl;
 				exit(0);
-			
+
 			}
 			std::cin.clear(); //Bug fix #1
 			std::cin.ignore(); //Bug fix #1
-		}	
+		}
 	}
 };
 
-int main() 
+int main()
 {
 	TUI managerSystem;
 	managerSystem.run();
