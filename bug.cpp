@@ -4,6 +4,9 @@
 //#3 FIXED - Enter any other character to terminate program -> replaced else if (choice > 7) with else
 //#4 FIXED - Choice 2: Add student - fixed input iss bug 
 //#5 FIXED - Function names "serachByName" "serachById" "serachByEmail" replaced with "searchByName" "searchById" "searchByEmail"
+//#6 FIXED - Choice 7: Update student (ID) - fixed parameter mismatch for newid and id
+//#7 FIXED - Choice 7: Update student (all) - added cout instructions to users asking for input
+//#8 FIXED - Choice 7: Update student (all) - When update is sucessful, return the newly updated student to the user
 
 #include <iostream>
 #include <fstream>
@@ -313,39 +316,46 @@ public:
 				cout << "Please enter item you want to update: (1 name, 2 id, 3 email, 4 grade of presentation, 5 grade of essay, 6 grade of project" << endl;
 				int item;
 				cin >> item;
-				cout << "you entered: " << item << endl;
-				/*
+				//bug fix #7: Ask user for input for item == 1-6
 				if (item == 1) {
+					cout << "Please enter the new name: " << endl;
 					char name[40];
 					cin >> name;
 					manager.updateStudentName(id, name);
 				}
+				
 				else if(item == 2){
+					cout << "Please enter the new id: " << endl;
 					char newid[10];
 					cin >> newid;
-					manager.updateStudentId(newid, id);
+					manager.updateStudentId(id, newid); //bug fix #6: fixed id new id parameters
 				}
 				else if (item == 3) {
+					cout << "Please enter the new email: " << endl;
 					char email[40];
 					cin >> email;
 					manager.updateStudentEmail(id, email);
 				}
 				else if(item == 4){
-					int temp;
-					cin >> temp;
-					manager.updateStudentGradeOfPresentation(id, temp);
+					cout << "Please enter the new presentation grade: " << endl;
+					int gpre;
+					cin >> gpre;
+					manager.updateStudentGradeOfPresentation(id, gpre);
 				}
 				else if (item == 5) {
-					int temp;
-					cin >> temp;
-					manager.updateStudentGradeOfEssay(id, temp);
+					cout << "Please enter the new essay grade: " << endl;
+					int ge;
+					cin >> ge;
+					manager.updateStudentGradeOfEssay(id, ge);
 				}
 				else if (item == 6) {
-					int temp;
-					cin >> temp;
-					manager.updateStudentGradeOfProject(id, temp);
-				}*/
+					cout << "Please enter the new project grade: " << endl;
+					int gro;
+					cin >> gro;
+					manager.updateStudentGradeOfProject(id, gro);
+				}
 				cout << "Done!" << endl << endl;
+				manager.searchById(id); //Bug fix #8: Print update to user
 			}
 			//Bug fix #3: Changed else if (choice > 7) to else. This terminates
 			// the program if a number 1-7 is not entered
