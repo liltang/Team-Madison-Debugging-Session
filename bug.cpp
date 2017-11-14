@@ -233,13 +233,119 @@ public:
 
 class TUI {
 	DataManager manager;
+
+	bool IsValidGPA(int value) {
+		return value >= 0 && value <= 4;
+	}
+
+	bool IsValidEmail(char value[]) {	
+		
+		if (value == NULL) return false;
+
+		auto stringValue = std::string(value, sizeof(value));
+		
+		bool isEmpty = stringValue.length() == 0;
+		bool isMissingAtSign = stringValue.find('@') == std::string::npos;
+		bool isMissingDot = stringValue.find('.') == std::string::npos;
+		bool hasSpace = stringValue.find_first_of("\t\n ") != std::string::npos;
+		bool isFirstCharacterAtSign = stringValue[0] == '@';
+		bool isFirstCharacterDot = stringValue[0] == '.';
+		
+		return !isEmpty && !isMissingAtSign && !isMissingDot && !isFirstCharacterAtSign && !isFirstCharacterDot && !hasSpace;
+	}
+
+	bool IsValidName(char value[]) {
+		std:string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+		if (value == NULL) return false;
+
+		auto stringValue = std::string(value, sizeof(value));
+
+		bool isEmpty = stringValue.length() == 0;
+		
+		bool hasInvalidCharacters = false;
+		for (int i = 0; i < stringValue.length(); i++)
+		{
+			if (validCharacters.find(stringValue[i]) == std::string::npos) {
+				hasInvalidCharacters = true;
+			}
+		}
+		
+		return !isEmpty && !hasInvalidCharacters;
+	}
+
+	bool IsValidID(char value[]) {
+		std:string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		if (value == NULL) return false;
+
+		auto stringValue = std::string(value, sizeof(value));
+
+		bool isEmpty = stringValue.length() == 0;
+
+		
+
+
+	}
 public:
+	void Test() {
+		if (!IsValidGPA(4)) throw;
+		if (!IsValidGPA(2)) throw;
+		if (!IsValidGPA(1)) throw;
+		if (!IsValidGPA(0)) throw;
+		if (IsValidGPA(-1)) throw;
+		if (IsValidGPA(5)) throw;
+
+
+		char email1[] = { 'a','@','b','.','c' };
+		char email2[] = { '@','@','b','.','c' };
+		char email3[] = { '.','@','b','.','c' };
+		char email4[1] = {};
+		char email5[] = { 'a','b','.','c' };
+		char email6[] = { 'a','@','c' };
+		char email7[] = { 'a',' ','@','b','.' };
+
+		if (!IsValidEmail(email1)) throw;
+		if (IsValidEmail(email2)) throw;
+		if (IsValidEmail(email3)) throw;
+		if (IsValidEmail(email4)) throw;
+		if (IsValidEmail(email5)) throw;
+		if (IsValidEmail(email6)) throw;
+		if (IsValidEmail(email7)) throw;
+
+		char name1[] = { 'a','s','a','f' };
+		char name2[] = { 'a','s','a','@' };
+		char name3[] = { 'a','s','3','f' };
+		char name4[] = { 'a','$','a','f' };
+		char name5[] = { 'a','s','a',')' };
+		char name6[] = { '#','s','a','f' };
+		char name7[] = { '.','s','a','f' };
+
+		if (!IsValidName(name1)) throw;
+		if (IsValidName(name2)) throw;
+		if (IsValidName(name3)) throw;
+		if (IsValidName(name4)) throw;
+		if (IsValidName(name5)) throw;
+		if (IsValidName(name6)) throw;
+		if (IsValidName(name7)) throw;
+
+		char id1[] = { 'a','s','a','f' };
+		char id2[] = { 'a','s','a','@' };
+		char id3[] = { 'a','s','3','f' };
+		char id4[] = { '2','1','4','f' };
+		
+		if (!IsValidID(id1)) throw;
+		if (!IsValidID(id2)) throw;
+		if (!IsValidID(id3)) throw;
+		if (!IsValidID(id4)) throw;
+		
+		
+	}
 	//read file to initialize the database
 	TUI() {
-		string file;
+		/*string file;
 		cout << "Please enter the data/file/name.txt to initialize the database: " ;
 		cin >> file;
-		manager.readStudentData(file);
+		manager.readStudentData(file);*/
 	}
 
 	//The system's running logic
@@ -269,7 +375,7 @@ public:
 				getline(cin, input);
 				istringstream iss(input);
 				//Bug fix #4: fixed iss input to properly read each variable
-                           	char name[40], id[10], email[40];
+                char name[40], id[10], email[40];
 				iss >> name;
 				iss >> id;
 				iss >> email;
@@ -378,7 +484,8 @@ public:
 
 int main()
 {
+
 	TUI managerSystem;
-	managerSystem.run();
+	managerSystem.Test();
 	return 0;
 }
