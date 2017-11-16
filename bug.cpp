@@ -4,6 +4,7 @@
 //#3 FIXED - Enter any other character to terminate program -> replaced else if (choice > 7) with else
 //#4 FIXED - Choice 2: Add student - fixed input iss bug 
 //#5 FIXED - Function names "serachByName" "serachById" "serachByEmail" replaced with "searchByName" "searchById" "searchByEmail"
+//#6 FIXED - Search student by email
 
 #include <iostream>
 #include <fstream>
@@ -154,7 +155,7 @@ public:
 
 	//search student by email
 	void searchByEmail(char *email) {
-		for (vector<Student>::iterator it = studentDatabase.begin(); it == studentDatabase.end(); ++it) {
+		for (vector<Student>::iterator it = studentDatabase.begin(); it != studentDatabase.end(); ++it) {
 			if (strcmp(it->getEmail(), email) == 0) {
 				cout << it->info() << endl;
 				return;
