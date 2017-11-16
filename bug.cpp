@@ -15,6 +15,58 @@
 using namespace std;
 
 
+static bool IsValidGPA(char value[]) {
+	auto intValue = atoi(value);
+	return intValue >= 0 && intValue <= 4;
+}
+
+static bool IsValidEmail(char value[]) {
+
+	if (value == NULL) return false;
+
+	auto stringValue = std::string(value);
+
+	bool isEmpty = stringValue.length() == 0;
+	bool isMissingAtSign = stringValue.find('@') == std::string::npos;
+	bool isMissingDot = stringValue.find('.') == std::string::npos;
+	bool hasSpace = stringValue.find_first_of("\t\n ") != std::string::npos;
+	bool isFirstCharacterAtSign = stringValue[0] == '@';
+	bool isFirstCharacterDot = stringValue[0] == '.';
+
+	return !isEmpty && !isMissingAtSign && !isMissingDot && !isFirstCharacterAtSign && !isFirstCharacterDot && !hasSpace;
+}
+
+static bool IsValidName(char value[]) {
+std:string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+	if (value == NULL) return false;
+
+	auto stringValue = std::string(value, sizeof(value));
+
+	bool isEmpty = stringValue.length() == 0;
+
+	bool hasInvalidCharacters = false;
+	for (int i = 0; i < stringValue.length() - 1; i++)
+	{
+		if (stringValue[i] == '\0') break;
+		if (validCharacters.find(stringValue[i]) == std::string::npos) {
+			hasInvalidCharacters = true;
+		}
+	}
+
+	return !isEmpty && !hasInvalidCharacters;
+}
+
+static bool IsValidID(char value[]) {
+std:string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+	if (value == NULL) return false;
+
+	auto stringValue = std::string(value, sizeof(value));
+
+	bool isEmpty = stringValue.length() == 0;
+}
+
+
 class Student
 {
 	char name[40];
@@ -24,7 +76,7 @@ class Student
 	int gradeOfEssay;
 	int gradeOfProject;
 public:
-	Student(char *na, char *id, char * em, int gpre, int ge, int gpro) : gradeOfPresentation(gpre), gradeOfEssay(ge), gradeOfProject(gpro) {
+	Student(const char *na, const char *id, const  char * em, int gpre, int ge, int gpro) : gradeOfPresentation(gpre), gradeOfEssay(ge), gradeOfProject(gpro) {
 		strcpy(name, na);
 		strcpy(usf_id, id);
 		strcpy(email, em);
@@ -103,6 +155,9 @@ public:
 		char temp_email[40];
 		int gpre, ge, gp;
 		while (fin >> temp_name >> temp_id >> temp_email >> gpre >> gp >> ge) {
+			/*if (!IsValidName(temp_name) && !IsValidID(temp_id) && !IsValidEmail(temp_email) && !IsValidGPA(gpre) && !IsValidGPA(gp) && !IsValidGPA(ge)) {
+				printf("Invalid File");
+			}TODO:ASAF*/
 			studentDatabase.push_back(Student(temp_name, temp_id, temp_email, gpre, ge, gp));
 		}
 		fin.close();
@@ -227,66 +282,30 @@ public:
 class TUI {
 	DataManager manager;
 
-	bool IsValidGPA(int value) {
-		return value >= 0 && value <= 4;
-	}
+	string AskFor(string text, bool(*validationFunction)(char[])) {
+		char value[40];
+		while (true) {
+			cout << text;
+			cout << "\r\n";
 
-	bool IsValidEmail(char value[]) {
+			cin >> value;
 
-		if (value == NULL) return false;
-
-		auto stringValue = std::string(value, sizeof(value));
-
-		bool isEmpty = stringValue.length() == 0;
-		bool isMissingAtSign = stringValue.find('@') == std::string::npos;
-		bool isMissingDot = stringValue.find('.') == std::string::npos;
-		bool hasSpace = stringValue.find_first_of("\t\n ") != std::string::npos;
-		bool isFirstCharacterAtSign = stringValue[0] == '@';
-		bool isFirstCharacterDot = stringValue[0] == '.';
-
-		return !isEmpty && !isMissingAtSign && !isMissingDot && !isFirstCharacterAtSign && !isFirstCharacterDot && !hasSpace;
-	}
-
-	bool IsValidName(char value[]) {
-	std:string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-		if (value == NULL) return false;
-
-		auto stringValue = std::string(value, sizeof(value));
-
-		bool isEmpty = stringValue.length() == 0;
-
-		bool hasInvalidCharacters = false;
-		for (int i = 0; i < stringValue.length(); i++)
-		{
-			if (validCharacters.find(stringValue[i]) == std::string::npos) {
-				hasInvalidCharacters = true;
+			if (!(*validationFunction)(value)) {
+				cout << "Incorrect, please try again.";
+			}
+			else {
+				return value;
 			}
 		}
-
-		return !isEmpty && !hasInvalidCharacters;
-	}
-
-	bool IsValidID(char value[]) {
-	std:string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-		if (value == NULL) return false;
-
-		auto stringValue = std::string(value, sizeof(value));
-
-		bool isEmpty = stringValue.length() == 0;
-
-
-
-
 	}
 public:
 	void Test() {
-		if (!IsValidGPA(4)) throw;
-		if (!IsValidGPA(2)) throw;
-		if (!IsValidGPA(1)) throw;
-		if (!IsValidGPA(0)) throw;
-		if (IsValidGPA(-1)) throw;
-		if (IsValidGPA(5)) throw;
+		if (!IsValidGPA("4")) throw;
+		if (!IsValidGPA("2")) throw;
+		if (!IsValidGPA("1")) throw;
+		if (!IsValidGPA("0")) throw;
+		if (IsValidGPA("-1")) throw;
+		if (IsValidGPA("5")) throw;
 
 
 		char email1[] = { 'a','@','b','.','c' };
@@ -356,39 +375,38 @@ public:
 			cin >> choice;
 			cin.get();
 			if (choice == 1) {
-				cout << "Please enter the output/file/name.txt: ";
-				string output;
-				cin >> output;
+				string output = AskFor("Please enter the output / file / name.txt: ", &IsValidName);
+
 				manager.writeStudentData(output);
 				cout << "Done!" << endl << endl;
 			}
 			else if (choice == 2) {
-				cout << "Please enter the student's information on 1 line( name id email presentationGrade essayGrade projectGrade):" << endl;
-				string input;
-				getline(cin, input);
-				istringstream iss(input);
-				//Bug fix #4: fixed iss input to properly read each variable
-				char name[40], id[10], email[40];
-				iss >> name;
-				iss >> id;
-				iss >> email;
-				int gpre, ge, gpro;
-				iss >> gpre;
-				iss >> ge;
-				iss >> gpro;
-				manager.addStudent(Student(name, id, email, gpre, ge, gpro));
+				cout << "Please enter the student's information.";
+				string name = AskFor("Name: ", IsValidName);
+				string id = AskFor("ID: ", IsValidID);
+				string email = AskFor("Email: ", IsValidEmail);
+				string presentationGPA = AskFor("Presentation Grade: ", IsValidGPA);
+				string essayGPA = AskFor("Essay Grade: ", IsValidGPA);
+				string projectGPA = AskFor("Project Grade: ", IsValidGPA);
+
+				int i_presentationGPA = stoi(presentationGPA);
+				int i_essayGPA = stoi(essayGPA);
+				int i_projectGPA = stoi(projectGPA);
+
+				manager.addStudent(Student(name.c_str(), id.c_str(), email.c_str(), i_presentationGPA, i_essayGPA, i_projectGPA));
 				cout << "Done!" << endl << endl;
 			}
 			else if (choice == 3) {
-				cout << "Please enter the student's id:" << endl;
-				char id[10];
+
+				string id = AskFor("Please enter the student's id:", IsValidID);
+				
 				cin >> id;
-				if (manager.deleteStudent(id)) {
+				//if (manager.deleteStudent(id) {
 					cout << "Delete successfully." << endl;
-				}
-				else {
+				//}
+				//else {
 					cout << "Failed to delete" << endl;
-				}
+				//}
 				cout << endl;
 			}
 			else if (choice == 4) {
