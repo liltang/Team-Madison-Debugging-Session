@@ -5,6 +5,13 @@
 //#4 FIXED - Choice 2: Add student - fixed input iss bug 
 //#5 FIXED - Function names "serachByName" "serachById" "serachByEmail" replaced with "searchByName" "searchById" "searchByEmail"
 //#6 FIXED - Search student by email
+//#6 FIXED - Choice 7: Update student (ID) - fixed parameter mismatch for newid and id
+//#7 FIXED - Choice 7: Update student (all) - added cout instructions to users asking for input
+//#8 FIXED - Choice 7: Update student (all) - When update is sucessful, return the newly updated student to the user
+//??? #9 array overflow not prevented
+//?? #10 FIXED - errors on delete if student does not exist
+//#11 FIXED - Search student by email
+ 
 
 #include <iostream>
 #include <fstream>
@@ -13,7 +20,6 @@
 #include <cstring>
 #include <cstdio>
 using namespace std;
-
 
 static bool IsValidGPA(char value[]) {
 	auto intValue = atoi(value);
@@ -37,7 +43,7 @@ static bool IsValidEmail(char value[]) {
 }
 
 static bool IsValidName(char value[]) {
-std:string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	std:string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	if (value == NULL) return false;
 
@@ -66,7 +72,6 @@ std:string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX
 	bool isEmpty = stringValue.length() == 0;
 }
 
-
 class Student
 {
 	char name[40];
@@ -76,7 +81,7 @@ class Student
 	int gradeOfEssay;
 	int gradeOfProject;
 public:
-	Student(const char *na, const char *id, const  char * em, int gpre, int ge, int gpro) : gradeOfPresentation(gpre), gradeOfEssay(ge), gradeOfProject(gpro) {
+	Student(char *na, char *id, char * em, int gpre, int ge, int gpro) : gradeOfPresentation(gpre), gradeOfEssay(ge), gradeOfProject(gpro) {
 		strcpy(name, na);
 		strcpy(usf_id, id);
 		strcpy(email, em);
@@ -155,9 +160,6 @@ public:
 		char temp_email[40];
 		int gpre, ge, gp;
 		while (fin >> temp_name >> temp_id >> temp_email >> gpre >> gp >> ge) {
-			/*if (!IsValidName(temp_name) && !IsValidID(temp_id) && !IsValidEmail(temp_email) && !IsValidGPA(gpre) && !IsValidGPA(gp) && !IsValidGPA(ge)) {
-				printf("Invalid File");
-			}TODO:ASAF*/
 			studentDatabase.push_back(Student(temp_name, temp_id, temp_email, gpre, ge, gp));
 		}
 		fin.close();
@@ -286,28 +288,29 @@ class TUI {
 		char value[40];
 		while (true) {
 			cout << text;
-			cout << "\r\n";
-
+			cout << "\r\n";	
 			cin >> value;
-
 			if (!(*validationFunction)(value)) {
 				cout << "Incorrect, please try again.";
 			}
 			else {
 				return value;
-			}
+			}		
 		}
-	}
+	}		
+
 public:
 	void Test() {
-		if (!IsValidGPA("4")) throw;
-		if (!IsValidGPA("2")) throw;
-		if (!IsValidGPA("1")) throw;
-		if (!IsValidGPA("0")) throw;
-		if (IsValidGPA("-1")) throw;
-		if (IsValidGPA("5")) throw;
 
+		/*
+		if (!IsValidGPA(4)) throw;
+		if (!IsValidGPA(2)) throw;
+		if (!IsValidGPA(1)) throw;
+		if (!IsValidGPA(0)) throw;
+		if (IsValidGPA(-1)) throw;
+		if (IsValidGPA(5)) throw;
 
+		*/
 		char email1[] = { 'a','@','b','.','c' };
 		char email2[] = { '@','@','b','.','c' };
 		char email3[] = { '.','@','b','.','c' };
@@ -375,13 +378,18 @@ public:
 			cin >> choice;
 			cin.get();
 			if (choice == 1) {
-				string output = AskFor("Please enter the output / file / name.txt: ", &IsValidName);
-
+//				string output = AskFor("Please enter the output / file / name.txt: ", &IsValidName);
+				
+				cout << "Please enter the output/file/name.txt: ";
+				string output;
+				cin >> output;
 				manager.writeStudentData(output);
 				cout << "Done!" << endl << endl;
 			}
 			else if (choice == 2) {
-				cout << "Please enter the student's information.";
+			
+/*
+			cout << "Please enter the student's information.";
 				string name = AskFor("Name: ", IsValidName);
 				string id = AskFor("ID: ", IsValidID);
 				string email = AskFor("Email: ", IsValidEmail);
@@ -394,19 +402,35 @@ public:
 				int i_projectGPA = stoi(projectGPA);
 
 				manager.addStudent(Student(name.c_str(), id.c_str(), email.c_str(), i_presentationGPA, i_essayGPA, i_projectGPA));
+*/
+				cout << "Please enter the student's information on 1 line( name id email presentationGrade essayGrade projectGrade):" << endl;
+				string input;
+				getline(cin, input);
+				istringstream iss(input);
+				//Bug fix #4: fixed iss input to properly read each variable
+				char name[40], id[10], email[40];
+				iss >> name;
+				iss >> id;
+				iss >> email;
+				int gpre, ge, gpro;
+				iss >> gpre;
+				iss >> ge;
+				iss >> gpro;
+				manager.addStudent(Student(name, id, email, gpre, ge, gpro));
 				cout << "Done!" << endl << endl;
 			}
 			else if (choice == 3) {
+				//string id = AskFor("Please enter the student's id:", IsValidID);
 
-				string id = AskFor("Please enter the student's id:", IsValidID);
-				
+				cout << "Please enter the student's id:" << endl;
+				char id[10];
 				cin >> id;
-				//if (manager.deleteStudent(id) {
+				if (manager.deleteStudent(id)) {
 					cout << "Delete successfully." << endl;
-				//}
-				//else {
+				}
+				else {
 					cout << "Failed to delete" << endl;
-				//}
+				}
 				cout << endl;
 			}
 			else if (choice == 4) {
@@ -436,45 +460,68 @@ public:
 				cout << "Done!" << endl << endl;
 			}
 			else if (choice == 7) {
-				cout << "Please enter the student's id:" << endl;
 				char id[10];
-				cin >> id;
+				do {
+                                        cout << "Please enter the student's id:" << endl;
+                                        cin >> id;
+                                        if (!IsValidID(id)) {
+                                                cout << "\r\nInvalid id, please try again";
+                                        }
+                                } while (!IsValidID(id));
 				manager.searchById(id);
-				cout << "Please enter item you want to update: (1 name, 2 id, 3 email, 4 grade of presentation, 5 grade of essay, 6 grade of project" << endl;
 				int item;
-				cin >> item;
-				cout << "you entered: " << item << endl;
-
+                                do {
+					cout << "Please enter item you want to update: " <<
+					"(1 name, 2 id, 3 email, 4 grade of presentation, 5 grade of essay, 6 grade of project)." << endl <<
+					"Enter 7 to terminate the program." << endl; // Bug fix #11 Allow the user to terminate the program
+					cin >> item;
+					cout << "you entered: " << item << endl;
+					//bug fix #7: Ask user for input for item == 1-6
+					if(item != 1 || item !=2 || item != 3 || item !=4 || item !=5 || item !=6 || item !=7){
+						cout << "\r\nInvalid item selection, please try again" << endl;
+					}
+				} while(item != 1 || item !=2 || item != 3 || item !=4 || item !=5 || item !=6 || item !=7);
 				if (item == 1) {
+					cout << "Please enter the new name: " << endl;
 					char name[40];
 					cin >> name;
 					manager.updateStudentName(id, name);
 				}
 				else if (item == 2) {
+					cout << "Please enter the new id: " << endl;
 					char newid[10];
 					cin >> newid;
-					manager.updateStudentId(newid, id);
+					manager.updateStudentId(id, newid); //bug fix #6 fixed id parameters
 				}
 				else if (item == 3) {
+					cout << "Please enter the new email: " << endl;
 					char email[40];
 					cin >> email;
 					manager.updateStudentEmail(id, email);
 				}
 				else if (item == 4) {
-					int temp;
-					cin >> temp;
-					manager.updateStudentGradeOfPresentation(id, temp);
+					cout << "Please enter the new presentation grade: " << endl;
+					int gpre;
+					cin >> gpre;
+					manager.updateStudentGradeOfPresentation(id, gpre);
 				}
 				else if (item == 5) {
-					int temp;
-					cin >> temp;
-					manager.updateStudentGradeOfEssay(id, temp);
+					cout << "Please enter the new essay grade: " << endl;
+					int ge;
+					cin >> ge;
+					manager.updateStudentGradeOfEssay(id, ge);
 				}
 				else if (item == 6) {
-					int temp;
-					cin >> temp;
-					manager.updateStudentGradeOfProject(id, temp);
+					cout << "Please enter the new project grade: " << endl;
+					int gro;
+					cin >> gro;
+					manager.updateStudentGradeOfProject(id, gro);
 				}
+				else if (item = 7) {
+					cout << "Terminating program...\n\nSee you later!" << endl;
+					exit(0);
+				}
+					
 				cout << "Done!" << endl << endl;
 			}
 			//Bug fix #3: Changed else if (choice > 7) to else. This terminates
