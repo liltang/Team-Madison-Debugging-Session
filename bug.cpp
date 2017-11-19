@@ -11,7 +11,7 @@
 //??? #9 array overflow not prevented
 //?? #10 FIXED - errors on delete if student does not exist
 //#11 FIXED - Search student by email
- 
+//#12 FIXED - input validation across the program
 
 #include <iostream>
 #include <fstream>
@@ -43,7 +43,71 @@ static bool IsValidEmail(char value[]) {
 }
 
 static bool IsValidName(char value[]) {
-	std:string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+std:string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+	if (value == NULL) return false;
+
+	auto stringValue = std::string(value, sizeof(value));
+
+	bool isEmpty = stringValue.length() == 0;
+
+	bool hasInvalidCharacters = false;
+	for (int i = 0; i < stringValue.length() - 1; i++)
+	{
+		if (stringValue[i] == '\0') break;
+		if (validCharacters.find(stringValue[i]) == std::string::npos) {
+			hasInvalidCharacters = true;
+		}
+	}
+
+	return !isEmpty && !hasInvalidCharacters;
+}
+
+static bool IsValidStudentMainMenuOption(char value[]) {
+std:string validCharacters = "1234567";
+
+	if (value == NULL) return false;
+
+	auto stringValue = std::string(value, sizeof(value));
+
+	bool isEmpty = stringValue.length() == 0;
+
+	bool hasInvalidCharacters = false;
+	for (int i = 0; i < stringValue.length() - 1; i++)
+	{
+		if (stringValue[i] == '\0') break;
+		if (validCharacters.find(stringValue[i]) == std::string::npos) {
+			hasInvalidCharacters = true;
+		}
+	}
+
+	return !isEmpty && !hasInvalidCharacters;
+}
+
+static bool IsValidStudentMainMenuOption(char value[]) {
+std:string validCharacters = "1234567";
+
+	if (value == NULL) return false;
+
+	auto stringValue = std::string(value, sizeof(value));
+
+	bool isEmpty = stringValue.length() == 0;
+
+	bool hasInvalidCharacters = false;
+	for (int i = 0; i < stringValue.length() - 1; i++)
+	{
+		if (stringValue[i] == '\0') break;
+		if (validCharacters.find(stringValue[i]) == std::string::npos) {
+			hasInvalidCharacters = true;
+		}
+	}
+
+	return !isEmpty && !hasInvalidCharacters;
+}
+
+
+static bool IsValidFileName(char value[]) {
+std:string validCharacters = "0123456789.-_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	if (value == NULL) return false;
 
@@ -64,12 +128,22 @@ static bool IsValidName(char value[]) {
 }
 
 static bool IsValidID(char value[]) {
-std:string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+std:string validCharacters = "Uu0123456789";
 	if (value == NULL) return false;
 
 	auto stringValue = std::string(value, sizeof(value));
-
+	bool isFirstCharacterNotaU = (stringValue[0] != 'u') && (isFirstCharacterNotaU = stringValue[0] != 'U');
 	bool isEmpty = stringValue.length() == 0;
+	bool hasInvalidCharacters = false;
+	for (int i = 0; i < stringValue.length() - 1; i++)
+	{
+		if (stringValue[i] == '\0') break;
+		if (validCharacters.find(stringValue[i]) == std::string::npos) {
+			hasInvalidCharacters = true;
+		}
+	}
+
+	return !hasInvalidCharacters && !isFirstCharacterNotaU && !isEmpty;
 }
 
 class Student
@@ -81,7 +155,7 @@ class Student
 	int gradeOfEssay;
 	int gradeOfProject;
 public:
-	Student(char *na, char *id, char * em, int gpre, int ge, int gpro) : gradeOfPresentation(gpre), gradeOfEssay(ge), gradeOfProject(gpro) {
+	Student(const char *na, const char *id, const char * em, int gpre, int ge, int gpro) : gradeOfPresentation(gpre), gradeOfEssay(ge), gradeOfProject(gpro) {
 		strcpy(name, na);
 		strcpy(usf_id, id);
 		strcpy(email, em);
@@ -89,7 +163,7 @@ public:
 
 	// Setter and getter methods //
 
-	void setName(char *na) {
+	void setName(const char *na) {
 		strcpy(name, na);
 	}
 
@@ -97,7 +171,7 @@ public:
 		return name;
 	}
 
-	void setId(char *id) {
+	void setId(const char *id) {
 		strcpy(usf_id, id);
 	}
 
@@ -105,7 +179,7 @@ public:
 		return usf_id;
 	}
 
-	void setEmail(char *em) {
+	void setEmail(const char *em) {
 		strcpy(email, em);
 	}
 
@@ -179,7 +253,7 @@ public:
 	}
 
 	// delete student by id
-	bool deleteStudent(char *id) {
+	bool deleteStudent(const char *id) {
 		vector<Student>::iterator erasePos = studentDatabase.end();
 		for (vector<Student>::iterator it = studentDatabase.begin(); it != studentDatabase.end(); ++it) {
 			if (strcmp(it->getId(), id) == 0) {
@@ -191,7 +265,7 @@ public:
 	}
 
 	// search student by name
-	void searchByName(char *name) {
+	void searchByName(const char *name) {
 		for (vector<Student>::iterator it = studentDatabase.begin(); it != studentDatabase.end(); ++it) {
 			if (strcmp(it->getName(), name) == 0) {
 				cout << it->info() << endl;
@@ -201,7 +275,7 @@ public:
 	}
 
 	//search student by id
-	void searchById(char *id) {
+	void searchById(const char *id) {
 		for (vector<Student>::iterator it = studentDatabase.begin(); it != studentDatabase.end(); ++it) {
 			if (strcmp(it->getId(), id) == 0) {
 				cout << it->info() << endl;
@@ -211,7 +285,7 @@ public:
 	}
 
 	//search student by email
-	void searchByEmail(char *email) {
+	void searchByEmail(const char *email) {
 		for (vector<Student>::iterator it = studentDatabase.begin(); it != studentDatabase.end(); ++it) {
 			if (strcmp(it->getEmail(), email) == 0) {
 				cout << it->info() << endl;
@@ -221,7 +295,7 @@ public:
 	}
 
 	//update student name
-	void updateStudentName(char *id, char *newName) {
+	void updateStudentName(const char *id, const char *newName) {
 		for (vector<Student>::iterator it = studentDatabase.begin(); it != studentDatabase.end(); ++it) {
 			if (strcmp(it->getId(), id) == 0) {
 				it->setName(newName);
@@ -231,7 +305,7 @@ public:
 	}
 
 	//update student id
-	void updateStudentId(char *id, char *newId) {
+	void updateStudentId(const char *id, const char *newId) {
 		for (vector<Student>::iterator it = studentDatabase.begin(); it != studentDatabase.end(); ++it) {
 			if (strcmp(it->getId(), id) == 0) {
 				it->setId(newId);
@@ -241,7 +315,7 @@ public:
 	}
 
 	//update student email
-	void updateStudentEmail(char *id, char *newEmail) {
+	void updateStudentEmail(const char *id, const char *newEmail) {
 		for (vector<Student>::iterator it = studentDatabase.begin(); it != studentDatabase.end(); ++it) {
 			if (strcmp(it->getId(), id) == 0) {
 				it->setEmail(newEmail);
@@ -251,7 +325,7 @@ public:
 	}
 
 	//update student grade of presentation
-	void updateStudentGradeOfPresentation(char *id, int grp) {
+	void updateStudentGradeOfPresentation(const char *id, const int grp) {
 		for (vector<Student>::iterator it = studentDatabase.begin(); it != studentDatabase.end(); ++it) {
 			if (strcmp(it->getId(), id) == 0) {
 				it->setGradeOfPresentation(grp);
@@ -261,7 +335,7 @@ public:
 	}
 
 	//update student grade of essay
-	void updateStudentGradeOfEssay(char *id, int ge) {
+	void updateStudentGradeOfEssay(const char *id, int ge) {
 		for (vector<Student>::iterator it = studentDatabase.begin(); it != studentDatabase.end(); ++it) {
 			if (strcmp(it->getId(), id) == 0) {
 				it->setGradeOfEssay(ge);
@@ -271,7 +345,7 @@ public:
 	}
 
 	//update student grade of project
-	void updateStudentGradeOfProject(char *id, int gp) {
+	void updateStudentGradeOfProject(const char *id, int gp) {
 		for (vector<Student>::iterator it = studentDatabase.begin(); it != studentDatabase.end(); ++it) {
 			if (strcmp(it->getId(), id) == 0) {
 				it->setGradeOfProject(gp);
@@ -288,29 +362,29 @@ class TUI {
 		char value[40];
 		while (true) {
 			cout << text;
-			cout << "\r\n";	
+			cout << "\r\n";
 			cin >> value;
 			if (!(*validationFunction)(value)) {
-				cout << "Incorrect, please try again.";
+				cout << "The input you provided is incorrect, please try again.\r\n";
 			}
 			else {
 				return value;
-			}		
+			}
 		}
-	}		
+	}
 
 public:
 	void Test() {
 
-		/*
-		if (!IsValidGPA(4)) throw;
-		if (!IsValidGPA(2)) throw;
-		if (!IsValidGPA(1)) throw;
-		if (!IsValidGPA(0)) throw;
-		if (IsValidGPA(-1)) throw;
-		if (IsValidGPA(5)) throw;
 
-		*/
+		if (!IsValidGPA("4")) throw;
+		if (!IsValidGPA("2")) throw;
+		if (!IsValidGPA("1")) throw;
+		if (!IsValidGPA("0")) throw;
+		if (IsValidGPA("-1")) throw;
+		if (IsValidGPA("5")) throw;
+
+
 		char email1[] = { 'a','@','b','.','c' };
 		char email2[] = { '@','@','b','.','c' };
 		char email3[] = { '.','@','b','.','c' };
@@ -357,9 +431,9 @@ public:
 	}
 	//read file to initialize the database
 	TUI() {
-		string file;
-		cout << "Please enter the data/file/name.txt to initialize the database: ";
-		cin >> file;
+
+		string file = AskFor("Please enter the output / file / name.txt: ", &IsValidFileName);
+
 		manager.readStudentData(file);
 	}
 
@@ -374,22 +448,21 @@ public:
 			cout << "6.- Search student by email" << endl;
 			cout << "7.- Update student info" << endl;
 			cout << "Please select your choice or enter any other value to terminate the program: ";
-			int choice;
-			cin >> choice;
-			cin.get();
+			
+			string result = AskFor("Please select your choice or enter any other value to terminate the program (1-7): ", &IsValidStudentMainMenuOption);
+
+			int choice = atoi(result.c_str());
+
 			if (choice == 1) {
-//				string output = AskFor("Please enter the output / file / name.txt: ", &IsValidName);
-				
-				cout << "Please enter the output/file/name.txt: ";
-				string output;
-				cin >> output;
+				string output = AskFor("Please enter the output / file / name.txt: ", &IsValidFileName);
+
 				manager.writeStudentData(output);
 				cout << "Done!" << endl << endl;
 			}
 			else if (choice == 2) {
-			
-/*
-			cout << "Please enter the student's information.";
+
+
+				cout << "Please enter the student's information.\r\n";
 				string name = AskFor("Name: ", IsValidName);
 				string id = AskFor("ID: ", IsValidID);
 				string email = AskFor("Email: ", IsValidEmail);
@@ -402,30 +475,13 @@ public:
 				int i_projectGPA = stoi(projectGPA);
 
 				manager.addStudent(Student(name.c_str(), id.c_str(), email.c_str(), i_presentationGPA, i_essayGPA, i_projectGPA));
-*/
-				cout << "Please enter the student's information on 1 line( name id email presentationGrade essayGrade projectGrade):" << endl;
-				string input;
-				getline(cin, input);
-				istringstream iss(input);
-				//Bug fix #4: fixed iss input to properly read each variable
-				char name[40], id[10], email[40];
-				iss >> name;
-				iss >> id;
-				iss >> email;
-				int gpre, ge, gpro;
-				iss >> gpre;
-				iss >> ge;
-				iss >> gpro;
-				manager.addStudent(Student(name, id, email, gpre, ge, gpro));
+
 				cout << "Done!" << endl << endl;
 			}
 			else if (choice == 3) {
-				//string id = AskFor("Please enter the student's id:", IsValidID);
+				string id = AskFor("Please enter the student's id:", IsValidID);
 
-				cout << "Please enter the student's id:" << endl;
-				char id[10];
-				cin >> id;
-				if (manager.deleteStudent(id)) {
+				if (manager.deleteStudent(id.c_str())) {
 					cout << "Delete successfully." << endl;
 				}
 				else {
@@ -434,94 +490,60 @@ public:
 				cout << endl;
 			}
 			else if (choice == 4) {
-				char name[30];
-				do {
-					cout << "Please enter the student's name:" << endl;
-					cin >> name;
-					if (!IsValidName(name)) {
-						cout << "\r\nInvalid name, please try again";
-					}
-				} while (!IsValidName(name));
-				manager.searchByName(name);
+
+				string name = AskFor("Please enter the student's name:", &IsValidName);
+				manager.searchByName(name.c_str());
 				cout << "Done!" << endl << endl;
 			}
 			else if (choice == 5) {
-				cout << "Please enter the student's id:" << endl;
-				char id[10];
-				cin >> id;
-				manager.searchById(id);
+				string id = AskFor("Please enter the student's id:", &IsValidID);
+				manager.searchById(id.c_str());
 				cout << "Done!" << endl << endl;
 			}
 			else if (choice == 6) {
-				cout << "Please enter the student's email:" << endl;
-				char email[30];
-				cin >> email;
-				manager.searchByEmail(email);
+				string email = AskFor("Please enter the student's email:", &IsValidEmail);
+				manager.searchByEmail(email.c_str());
 				cout << "Done!" << endl << endl;
 			}
 			else if (choice == 7) {
-				char id[10];
-				do {
-                                        cout << "Please enter the student's id:" << endl;
-                                        cin >> id;
-                                        if (!IsValidID(id)) {
-                                                cout << "\r\nInvalid id, please try again";
-                                        }
-                                } while (!IsValidID(id));
-				manager.searchById(id);
-				int item;
-                                do {
-					cout << "Please enter item you want to update: " <<
+				string id = AskFor("Please enter the student's id:", &IsValidID);
+				manager.searchById(id.c_str());
+
+				cout << "Please enter item you want to update: " <<
 					"(1 name, 2 id, 3 email, 4 grade of presentation, 5 grade of essay, 6 grade of project)." << endl <<
 					"Enter 7 to terminate the program." << endl; // Bug fix #11 Allow the user to terminate the program
-					cin >> item;
-					cout << "you entered: " << item << endl;
-					//bug fix #7: Ask user for input for item == 1-6
-					if(item != 1 || item !=2 || item != 3 || item !=4 || item !=5 || item !=6 || item !=7){
-						cout << "\r\nInvalid item selection, please try again" << endl;
-					}
-				} while(item != 1 || item !=2 || item != 3 || item !=4 || item !=5 || item !=6 || item !=7);
+
+				string result = AskFor("Please enter a choice (1-7): ", &IsValidStudentMainMenuOption);
+				int item = atoi(result.c_str());
 				if (item == 1) {
-					cout << "Please enter the new name: " << endl;
-					char name[40];
-					cin >> name;
-					manager.updateStudentName(id, name);
+					string name = AskFor("Please enter the student's name:", &IsValidName);
+					manager.updateStudentName(id.c_str(), name.c_str());
 				}
 				else if (item == 2) {
-					cout << "Please enter the new id: " << endl;
-					char newid[10];
-					cin >> newid;
-					manager.updateStudentId(id, newid); //bug fix #6 fixed id parameters
+					string newid = AskFor("Please enter the new id: ", &IsValidID);
+					manager.updateStudentId(id.c_str(), newid.c_str()); //bug fix #6 fixed id parameters
 				}
 				else if (item == 3) {
-					cout << "Please enter the new email: " << endl;
-					char email[40];
-					cin >> email;
-					manager.updateStudentEmail(id, email);
+					string email = AskFor("Please enter the new email: ", &IsValidEmail);
+					manager.updateStudentEmail(id.c_str(), email.c_str());
 				}
 				else if (item == 4) {
-					cout << "Please enter the new presentation grade: " << endl;
-					int gpre;
-					cin >> gpre;
-					manager.updateStudentGradeOfPresentation(id, gpre);
+					string gpre = AskFor("Please enter the new presentation grade: ", &IsValidGPA);
+					manager.updateStudentGradeOfPresentation(id.c_str(), atoi(gpre.c_str()));
 				}
 				else if (item == 5) {
-					cout << "Please enter the new essay grade: " << endl;
-					int ge;
-					cin >> ge;
-					manager.updateStudentGradeOfEssay(id, ge);
+					string ge = AskFor("Please enter the new essay grade: ", &IsValidGPA);
+					manager.updateStudentGradeOfEssay(id.c_str(), atoi(ge.c_str()));
 				}
 				else if (item == 6) {
-					cout << "Please enter the new project grade: " << endl;
-					int gro;
-					cin >> gro;
-					manager.updateStudentGradeOfProject(id, gro);
+					string gro = AskFor("Please enter the new project grade: ", &IsValidGPA);
+					manager.updateStudentGradeOfProject(id.c_str(), atoi(gro.c_str()));
 				}
 				else if (item = 7) {
 					cout << "Terminating program...\n\nSee you later!" << endl;
 					exit(0);
 				}
-					
+
 				cout << "Done!" << endl << endl;
 			}
 			//Bug fix #3: Changed else if (choice > 7) to else. This terminates
