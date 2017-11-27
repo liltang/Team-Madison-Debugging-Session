@@ -26,7 +26,7 @@ using namespace std;
 
 
 static bool IsValidGrade(char value[]) {
-std:string validCharacters = "0123456789";
+std:string validCharacters = "0123456789.";
 
 	if (value == NULL) return false;
 
@@ -35,17 +35,21 @@ std:string validCharacters = "0123456789";
 	bool isEmpty = stringValue.length() == 0;
 
 	bool hasInvalidCharacters = false;
-	for (int i = 0; i < stringValue.length() - 1; i++)
+	int periods = 0;
+	for (int i = 0; i < stringValue.length(); i++)
 	{
 		if (stringValue[i] == '\0') break;
 		if (validCharacters.find(stringValue[i]) == std::string::npos) {
 			hasInvalidCharacters = true;
 		}
+		if (stringValue[i] == '.') {
+			periods++;
+		}
 	}
 
-	if (isEmpty || hasInvalidCharacters) return false;
-	int intValue = atoi(value);
-	return intValue >= 0 && intValue <= 100;
+	if (isEmpty || hasInvalidCharacters || periods > 1) return false;
+	float floatValue = atof(value);
+	return floatValue >= 0 && floatValue <= 4;
 }
 
 static bool IsValidEmail(char value[]) {
@@ -74,7 +78,7 @@ std:string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX
 	bool isEmpty = stringValue.length() == 0;
 
 	bool hasInvalidCharacters = false;
-	for (int i = 0; i < stringValue.length() - 1; i++)
+	for (int i = 0; i < stringValue.length(); i++)
 	{
 		if (stringValue[i] == '\0') break;
 		if (validCharacters.find(stringValue[i]) == std::string::npos) {
@@ -95,7 +99,7 @@ std:string validCharacters = "1234567";
 	bool isEmpty = stringValue.length() == 0;
 
 	bool hasInvalidCharacters = false;
-	for (int i = 0; i < stringValue.length() - 1; i++)
+	for (int i = 0; i < stringValue.length(); i++)
 	{
 		if (stringValue[i] == '\0') break;
 		if (validCharacters.find(stringValue[i]) == std::string::npos) {
@@ -117,7 +121,7 @@ std:string validCharacters = "0123456789.-_abcdefghijklmnopqrstuvwxyzABCDEFGHIJK
 	bool isEmpty = stringValue.length() == 0;
 
 	bool hasInvalidCharacters = false;
-	for (int i = 0; i < stringValue.length() - 1; i++)
+	for (int i = 0; i < stringValue.length(); i++)
 	{
 		if (stringValue[i] == '\0') break;
 		if (validCharacters.find(stringValue[i]) == std::string::npos) {
@@ -136,7 +140,7 @@ std:string validCharacters = "Uu0123456789";
 	bool isFirstCharacterNotaU = (stringValue[0] != 'u') && (isFirstCharacterNotaU = stringValue[0] != 'U');
 	bool isEmpty = stringValue.length() == 0;
 	bool hasInvalidCharacters = false;
-	for (int i = 0; i < stringValue.length() - 1; i++)
+	for (int i = 0; i < stringValue.length(); i++)
 	{
 		if (stringValue[i] == '\0') break;
 		if (validCharacters.find(stringValue[i]) == std::string::npos) {
@@ -152,9 +156,9 @@ class Student
 	char name[40];
 	char usf_id[10];
 	char email[40];
-	int gradeOfPresentation;
-	int gradeOfEssay;
-	int gradeOfProject;
+	float gradeOfPresentation;
+	float gradeOfEssay;
+	float gradeOfProject;
 
 
 public:
@@ -166,7 +170,7 @@ public:
 #endif
 	}
 
-	Student(const char *na, const char *id, const char * em, int gpre, int ge, int gpro) : gradeOfPresentation(gpre), gradeOfEssay(ge), gradeOfProject(gpro) {
+	Student(const char *na, const char *id, const char * em, float gpre, float ge, float gpro) : gradeOfPresentation(gpre), gradeOfEssay(ge), gradeOfProject(gpro) {
 
 		copyString(name, 40, na);
 		copyString(usf_id, 10, id);
@@ -199,27 +203,27 @@ public:
 		return email;
 	}
 
-	void setGradeOfPresentation(int gpre) {
+	void setGradeOfPresentation(float gpre) {
 		gradeOfPresentation = gpre;
 	}
 
-	int getGradeOfPresentation() {
+	float getGradeOfPresentation() {
 		return gradeOfPresentation;
 	}
 
-	void setGradeOfEssay(int ge) {
+	void setGradeOfEssay(float ge) {
 		gradeOfEssay = ge;
 	}
 
-	int getGradeOfEssay() {
+	float getGradeOfEssay() {
 		return gradeOfEssay;
 	}
 
-	void setGradeOfProject(int gro) {
+	void setGradeOfProject(float gro) {
 		gradeOfProject = gro;
 	}
 
-	int getGradeOfProject() {
+	float getGradeOfProject() {
 		return gradeOfProject;
 	}
 
@@ -244,7 +248,7 @@ public:
 		char temp_name[40];
 		char temp_id[40];
 		char temp_email[40];
-		int gpre, ge, gp;
+		float gpre, ge, gp;
 		while (fin >> temp_name >> temp_id >> temp_email >> gpre >> gp >> ge) {
 			studentDatabase.push_back(Student(temp_name, temp_id, temp_email, gpre, ge, gp));
 		}
@@ -337,7 +341,7 @@ public:
 	}
 
 	//update student grade of presentation
-	void updateStudentGradeOfPresentation(const char *id, const int grp) {
+	void updateStudentGradeOfPresentation(const char *id, const float grp) {
 		for (vector<Student>::iterator it = studentDatabase.begin(); it != studentDatabase.end(); ++it) {
 			if (strcmp(it->getId(), id) == 0) {
 				it->setGradeOfPresentation(grp);
@@ -347,7 +351,7 @@ public:
 	}
 
 	//update student grade of essay
-	void updateStudentGradeOfEssay(const char *id, int ge) {
+	void updateStudentGradeOfEssay(const char *id, float ge) {
 		for (vector<Student>::iterator it = studentDatabase.begin(); it != studentDatabase.end(); ++it) {
 			if (strcmp(it->getId(), id) == 0) {
 				it->setGradeOfEssay(ge);
@@ -357,7 +361,7 @@ public:
 	}
 
 	//update student grade of project
-	void updateStudentGradeOfProject(const char *id, int gp) {
+	void updateStudentGradeOfProject(const char *id, float gp) {
 		for (vector<Student>::iterator it = studentDatabase.begin(); it != studentDatabase.end(); ++it) {
 			if (strcmp(it->getId(), id) == 0) {
 				it->setGradeOfProject(gp);
@@ -482,9 +486,9 @@ public:
 				string essayGPA = AskFor("Essay Grade: ", IsValidGrade);
 				string projectGPA = AskFor("Project Grade: ", IsValidGrade);
 
-				int i_presentationGPA = stoi(presentationGPA);
-				int i_essayGPA = stoi(essayGPA);
-				int i_projectGPA = stoi(projectGPA);
+				float i_presentationGPA = stof(presentationGPA);
+				float i_essayGPA = stof(essayGPA);
+				float i_projectGPA = stof(projectGPA);
 
 				manager.addStudent(Student(name.c_str(), id.c_str(), email.c_str(), i_presentationGPA, i_essayGPA, i_projectGPA));
 
@@ -541,15 +545,15 @@ public:
 				}
 				else if (item == 4) {
 					string gpre = AskFor("Please enter the new presentation grade: ", &IsValidGrade);
-					manager.updateStudentGradeOfPresentation(id.c_str(), atoi(gpre.c_str()));
+					manager.updateStudentGradeOfPresentation(id.c_str(), atof(gpre.c_str()));
 				}
 				else if (item == 5) {
 					string ge = AskFor("Please enter the new essay grade: ", &IsValidGrade);
-					manager.updateStudentGradeOfEssay(id.c_str(), atoi(ge.c_str()));
+					manager.updateStudentGradeOfEssay(id.c_str(), atof(ge.c_str()));
 				}
 				else if (item == 6) {
 					string gro = AskFor("Please enter the new project grade: ", &IsValidGrade);
-					manager.updateStudentGradeOfProject(id.c_str(), atoi(gro.c_str()));
+					manager.updateStudentGradeOfProject(id.c_str(), atof(gro.c_str()));
 				}
 				else if (item = 7) {
 					cout << "Terminating program...\n\nSee you later!" << endl;
