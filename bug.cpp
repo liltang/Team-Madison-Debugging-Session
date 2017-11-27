@@ -84,8 +84,6 @@ std:string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX
 static bool IsValidStudentMainMenuOption(char value[]) {
 std:string validCharacters = "1234567";
 
-<<<<<<< HEAD
-=======
 	if (value == NULL) return false;
 
 	auto stringValue = std::string(value, sizeof(value));
@@ -108,7 +106,6 @@ std:string validCharacters = "1234567";
 static bool IsValidFileName(char value[]) {
 std:string validCharacters = "0123456789.-_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
->>>>>>> be4ae7e052075aba5b3f57d198279ba70a88a9d1
 	if (value == NULL) return false;
 
 	auto stringValue = std::string(value, sizeof(value));
@@ -127,31 +124,6 @@ std:string validCharacters = "0123456789.-_abcdefghijklmnopqrstuvwxyzABCDEFGHIJK
 	return !isEmpty && !hasInvalidCharacters;
 }
 
-<<<<<<< HEAD
-
-static bool IsValidFileName(char value[]) {
-std:string validCharacters = "0123456789.-_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-	if (value == NULL) return false;
-
-	auto stringValue = std::string(value, sizeof(value));
-
-	bool isEmpty = stringValue.length() == 0;
-
-	bool hasInvalidCharacters = false;
-	for (int i = 0; i < stringValue.length() - 1; i++)
-	{
-		if (stringValue[i] == '\0') break;
-		if (validCharacters.find(stringValue[i]) == std::string::npos) {
-			hasInvalidCharacters = true;
-		}
-	}
-
-	return !isEmpty && !hasInvalidCharacters;
-}
-
-=======
->>>>>>> be4ae7e052075aba5b3f57d198279ba70a88a9d1
 static bool IsValidID(char value[]) {
 std:string validCharacters = "Uu0123456789";
 	if (value == NULL) return false;
@@ -181,25 +153,15 @@ class Student
 	int gradeOfProject;
 public:
 	Student(const char *na, const char *id, const char * em, int gpre, int ge, int gpro) : gradeOfPresentation(gpre), gradeOfEssay(ge), gradeOfProject(gpro) {
-<<<<<<< HEAD
 		strcpy_s(name, na);
 		strcpy_s(usf_id, id);
 		strcpy_s(email, em);
-=======
-		strcpy(name, na);
-		strcpy(usf_id, id);
-		strcpy(email, em);
->>>>>>> be4ae7e052075aba5b3f57d198279ba70a88a9d1
 	}
 
 	// Setter and getter methods //
 
 	void setName(const char *na) {
-<<<<<<< HEAD
 		strcpy_s(name, na);
-=======
-		strcpy(name, na);
->>>>>>> be4ae7e052075aba5b3f57d198279ba70a88a9d1
 	}
 
 	char *getName() {
@@ -207,11 +169,7 @@ public:
 	}
 
 	void setId(const char *id) {
-<<<<<<< HEAD
 		strcpy_s(usf_id, id);
-=======
-		strcpy(usf_id, id);
->>>>>>> be4ae7e052075aba5b3f57d198279ba70a88a9d1
 	}
 
 	char *getId() {
@@ -219,11 +177,7 @@ public:
 	}
 
 	void setEmail(const char *em) {
-<<<<<<< HEAD
 		strcpy_s(email, em);
-=======
-		strcpy(email, em);
->>>>>>> be4ae7e052075aba5b3f57d198279ba70a88a9d1
 	}
 
 	char *getEmail() {
@@ -420,21 +374,12 @@ public:
 	void Test() {
 
 
-<<<<<<< HEAD
 		if (!IsValidGrade("4")) throw;
 		if (!IsValidGrade("2")) throw;
 		if (!IsValidGrade("1")) throw;
 		if (!IsValidGrade("0")) throw;
 		if (IsValidGrade("-1")) throw;
 		if (IsValidGrade("5")) throw;
-=======
-		if (!IsValidGPA("4")) throw;
-		if (!IsValidGPA("2")) throw;
-		if (!IsValidGPA("1")) throw;
-		if (!IsValidGPA("0")) throw;
-		if (IsValidGPA("-1")) throw;
-		if (IsValidGPA("5")) throw;
->>>>>>> be4ae7e052075aba5b3f57d198279ba70a88a9d1
 
 
 		char email1[] = { 'a','@','b','.','c' };
@@ -580,7 +525,6 @@ public:
 					manager.updateStudentEmail(id.c_str(), email.c_str());
 				}
 				else if (item == 4) {
-<<<<<<< HEAD
 					string gpre = AskFor("Please enter the new presentation grade: ", &IsValidGrade);
 					manager.updateStudentGradeOfPresentation(id.c_str(), atoi(gpre.c_str()));
 				}
@@ -590,17 +534,6 @@ public:
 				}
 				else if (item == 6) {
 					string gro = AskFor("Please enter the new project grade: ", &IsValidGrade);
-=======
-					string gpre = AskFor("Please enter the new presentation grade: ", &IsValidGPA);
-					manager.updateStudentGradeOfPresentation(id.c_str(), atoi(gpre.c_str()));
-				}
-				else if (item == 5) {
-					string ge = AskFor("Please enter the new essay grade: ", &IsValidGPA);
-					manager.updateStudentGradeOfEssay(id.c_str(), atoi(ge.c_str()));
-				}
-				else if (item == 6) {
-					string gro = AskFor("Please enter the new project grade: ", &IsValidGPA);
->>>>>>> be4ae7e052075aba5b3f57d198279ba70a88a9d1
 					manager.updateStudentGradeOfProject(id.c_str(), atoi(gro.c_str()));
 				}
 				else if (item = 7) {
