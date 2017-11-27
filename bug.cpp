@@ -84,27 +84,6 @@ std:string validCharacters = "1234567";
 	return !isEmpty && !hasInvalidCharacters;
 }
 
-static bool IsValidStudentMainMenuOption(char value[]) {
-std:string validCharacters = "1234567";
-
-	if (value == NULL) return false;
-
-	auto stringValue = std::string(value, sizeof(value));
-
-	bool isEmpty = stringValue.length() == 0;
-
-	bool hasInvalidCharacters = false;
-	for (int i = 0; i < stringValue.length() - 1; i++)
-	{
-		if (stringValue[i] == '\0') break;
-		if (validCharacters.find(stringValue[i]) == std::string::npos) {
-			hasInvalidCharacters = true;
-		}
-	}
-
-	return !isEmpty && !hasInvalidCharacters;
-}
-
 
 static bool IsValidFileName(char value[]) {
 std:string validCharacters = "0123456789.-_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
