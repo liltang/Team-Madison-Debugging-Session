@@ -25,7 +25,7 @@ using namespace std;
 
 
 
-static bool IsValidGrade(char value[]) {
+static bool IsValidGrade(const char value[]) {
 std:string validCharacters = "0123456789.";
 
 	if (value == NULL) return false;
@@ -52,7 +52,7 @@ std:string validCharacters = "0123456789.";
 	return floatValue >= 0 && floatValue <= 4;
 }
 
-static bool IsValidEmail(char value[]) {
+static bool IsValidEmail(const char value[]) {
 
 	if (value == NULL) return false;
 
@@ -68,7 +68,7 @@ static bool IsValidEmail(char value[]) {
 	return !isEmpty && !isMissingAtSign && !isMissingDot && !isFirstCharacterAtSign && !isFirstCharacterDot && !hasSpace;
 }
 
-static bool IsValidName(char value[]) {
+static bool IsValidName(const char value[]) {
 std:string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	if (value == NULL) return false;
@@ -89,7 +89,7 @@ std:string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX
 	return !isEmpty && !hasInvalidCharacters;
 }
 
-static bool IsValidStudentMainMenuOption(char value[]) {
+static bool IsValidStudentMainMenuOption(const char value[]) {
 std:string validCharacters = "1234567";
 
 	if (value == NULL) return false;
@@ -111,7 +111,7 @@ std:string validCharacters = "1234567";
 }
 
 
-static bool IsValidFileName(char value[]) {
+static bool IsValidFileName(const char value[]) {
 std:string validCharacters = "0123456789.-_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	if (value == NULL) return false;
@@ -132,7 +132,7 @@ std:string validCharacters = "0123456789.-_abcdefghijklmnopqrstuvwxyzABCDEFGHIJK
 	return !isEmpty && !hasInvalidCharacters;
 }
 
-static bool IsValidID(char value[]) {
+static bool IsValidID(const char value[]) {
 std:string validCharacters = "Uu0123456789";
 	if (value == NULL) return false;
 
@@ -374,13 +374,25 @@ public:
 class TUI {
 	DataManager manager;
 
-	string AskFor(string text, bool(*validationFunction)(char[])) {
-		char value[40];
+	string AskFor(string text, bool(*validationFunction)(const char[])) {
+		string value;
 		while (true) {
-			cout << text;
-			cout << "\r\n";
-			cin >> value;
-			if (!(*validationFunction)(value)) {
+			bool isValid = true;
+			try
+			{
+				cout << text;
+				cout << "\r\n";
+				cin >> value;
+				while (cin.fail())
+					cin.ignore();
+				
+			}
+			catch (const std::exception&)
+			{
+				isValid = false;
+			}
+			
+			if (!isValid || !(*validationFunction)(value.c_str())) {
 				cout << "The input you provided is incorrect, please try again.\r\n";
 			}
 			else {
