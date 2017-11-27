@@ -21,11 +21,15 @@
 #include <cstdio>
 using namespace std;
 
+
+
+
+
 static bool IsValidGrade(char value[]) {
 std:string validCharacters = "0123456789";
 
 	if (value == NULL) return false;
-	
+
 	auto stringValue = std::string(value, sizeof(value));
 
 	bool isEmpty = stringValue.length() == 0;
@@ -39,7 +43,7 @@ std:string validCharacters = "0123456789";
 		}
 	}
 
-	if(isEmpty || hasInvalidCharacters) return false;
+	if (isEmpty || hasInvalidCharacters) return false;
 	int intValue = atoi(value);
 	return intValue >= 0 && intValue <= 100;
 }
@@ -153,15 +157,15 @@ class Student
 	int gradeOfProject;
 public:
 	Student(const char *na, const char *id, const char * em, int gpre, int ge, int gpro) : gradeOfPresentation(gpre), gradeOfEssay(ge), gradeOfProject(gpro) {
-		strcpy_s(name, na);
-		strcpy_s(usf_id, id);
-		strcpy_s(email, em);
+		strcpy(name, na);
+		strcpy(usf_id, id);
+		strcpy(email, em);
 	}
 
 	// Setter and getter methods //
 
 	void setName(const char *na) {
-		strcpy_s(name, na);
+		strcpy(name, na);
 	}
 
 	char *getName() {
@@ -169,7 +173,7 @@ public:
 	}
 
 	void setId(const char *id) {
-		strcpy_s(usf_id, id);
+		strcpy(usf_id, id);
 	}
 
 	char *getId() {
@@ -177,7 +181,7 @@ public:
 	}
 
 	void setEmail(const char *em) {
-		strcpy_s(email, em);
+		strcpy(email, em);
 	}
 
 	char *getEmail() {
@@ -445,7 +449,7 @@ public:
 			cout << "6.- Search student by email" << endl;
 			cout << "7.- Update student info" << endl;
 			cout << "Please select your choice or enter any other value to terminate the program: ";
-			
+
 			string result = AskFor("Please select your choice or enter any other value to terminate the program (1-7): ", &IsValidStudentMainMenuOption);
 
 			int choice = atoi(result.c_str());
