@@ -155,17 +155,28 @@ class Student
 	int gradeOfPresentation;
 	int gradeOfEssay;
 	int gradeOfProject;
+
+
 public:
+	void __cdecl copyString(char* dst, int size, const char* src) {
+#ifdef _WIN32 || _WIN64
+		strcpy_s(dst, size, src);
+#else
+		strcpy(dst, src);
+#endif
+	}
+
 	Student(const char *na, const char *id, const char * em, int gpre, int ge, int gpro) : gradeOfPresentation(gpre), gradeOfEssay(ge), gradeOfProject(gpro) {
-		strcpy(name, na);
-		strcpy(usf_id, id);
-		strcpy(email, em);
+
+		copyString(name, 40, na);
+		copyString(usf_id, 10, id);
+		copyString(email, 40, em);
 	}
 
 	// Setter and getter methods //
 
 	void setName(const char *na) {
-		strcpy(name, na);
+		copyString(name, 40, na);
 	}
 
 	char *getName() {
@@ -173,7 +184,7 @@ public:
 	}
 
 	void setId(const char *id) {
-		strcpy(usf_id, id);
+		copyString(usf_id, 10, id);
 	}
 
 	char *getId() {
@@ -181,7 +192,7 @@ public:
 	}
 
 	void setEmail(const char *em) {
-		strcpy(email, em);
+		copyString(email, 40, em);
 	}
 
 	char *getEmail() {
