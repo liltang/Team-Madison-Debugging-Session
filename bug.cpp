@@ -1,6 +1,6 @@
 //Bugs
 //#1 FIXED - Infinite loop due to non flushed input
-//#2 When entering student grades and then saving it
+//#2 FIXED - Saving and entering student names
 //#3 FIXED - Enter any other character to terminate program -> replaced else if (choice > 7) with else
 //#4 FIXED - Choice 2: Add student - fixed input iss bug 
 //#5 FIXED - Function names "serachByName" "serachById" "serachByEmail" replaced with "searchByName" "searchById" "searchByEmail"
@@ -8,8 +8,8 @@
 //#6 FIXED - Choice 7: Update student (ID) - fixed parameter mismatch for newid and id
 //#7 FIXED - Choice 7: Update student (all) - added cout instructions to users asking for input
 //#8 FIXED - Choice 7: Update student (all) - When update is sucessful, return the newly updated student to the user
-//??? #9 array overflow not prevented
-//?? #10 FIXED - errors on delete if student does not exist
+//#9 FIXED - array overflow not prevented
+//#10 FIXED - errors on delete if student does not exist
 //#11 FIXED - Search student by email
 //#12 FIXED - input validation across the program
 
